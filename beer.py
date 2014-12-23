@@ -7,7 +7,7 @@
 from time import sleep
 import RPi.GPIO as GPIO
 import pickle
-import Adafruit_ADS1x15
+from Adafruit_ADS1x15 import ADS1x15
 
 # configure gpio pins
 GPIO.setwarnings(False)
@@ -16,7 +16,8 @@ GPIO.setmode(GPIO.BCM)
 ADS1115 = 0x01
 
 # set to the +/- 1.024V range
-gain = 1024
+# +/- 4096
+gain = 4096
 
 # set the number of samples per second
 sps = 250
@@ -24,5 +25,10 @@ sps = 250
 # create an adc object
 adc = ADS1x15(ic=ADS1115)
 
-v_neg = 0
-v_pos = 0
+while(True):
+	# measure the differential voltage
+	v_bridge = adc.readADCDifferential(0,1,gain,sps)/1000.0
+	# print the measured voltage
+	print "%f" % v_bridge
+	# delay for a few seconds before going into loop again
+	sleep(1)
