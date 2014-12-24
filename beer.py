@@ -17,7 +17,7 @@ ADS1115 = 0x01
 
 # set to the +/- 1.024V range
 # +/- 4096
-gain = 4096
+gain = 256
 
 # set the number of samples per second
 sps = 250
@@ -25,10 +25,75 @@ sps = 250
 # create an adc object
 adc = ADS1x15(ic=ADS1115)
 
-while(True):
-	# measure the differential voltage
-	v_bridge = adc.readADCDifferential(0,1,gain,sps)/1000.0
+# number of samples to take average of
+samples = 15
+
+# voltage offset to remove weight of scale itself
+v_offset = -0.1
+
+# values for calibrating the strain gauge
+known_weight = 196
+known_volt = 3.11
+conv_fact = known_weight/known_volt
+
+def getVoltage(samples):
+	v_bridge_avg = 0
+	for  i in range(0,samples):
+		# measure the differential voltage
+		v_bridge = adc.readADCDifferential(1,0,gain,sps)
+		v_bridge = abs(v_bridge)
+		v_bridge_avg += v_bridge
+	# average the signal
+	v_bridge_avg /=samples
+	# return the voltage
+	return v_bridge_avg
+
+
+def toWeight(val, offset, scale):
+	# zero with offset
+	val += offset
+	# calculate the weight
+	val *= conv_fact
+	# retunr the weight value
+	return val
+
+def getKegState(type):
+	global v_offset
+	global conv_fact
+	global samples	
+
+	# get data
+	voltage = getVoltage(samples)
+	weight = toWeight(voltage, v_offset, samples)
+	
+	# assign wight of keg
+	if (type == "mini" or type == "Mini"):
+		max_weight = 13
+	elif (type == "cornelius" or type == "Cornelius"):
+		max_weight = 49
+	elif (type == "sixth" or type == "Sixth"):
+		max_weight = 58
+	elif (type == "quarter" or type == "Quarter"):
+		max_weight = 87
+	elif (type == "slim" or type == "Slim"):
+		max_weight = 87
+	else: #(type == "half" or type == "Half"):
+		max_weight = 161
+
+	# determine the percentage of beer remaining
+	percent = weight/max_weight
+	# convert that percentage to a state integer ranging from 0 to 5
+	state = int(5 * percent)
+	# return the keg state
+	return state
+
+
+
+while (False):
+	volts = getVoltage(15)
+	pounds = toWeight(volts,v_offset, conv_fact) 
+	status = getKegState("mini")
 	# print the measured voltage
-	print "%f" % v_bridge
+	print "%f      %f      %d " % (volts,pounds,status)
 	# delay for a few seconds before going into loop again
 	sleep(1)
