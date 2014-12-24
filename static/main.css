@@ -1,0 +1,44 @@
+
+
+
+html,body {
+	margin: 0;
+	padding: 0;
+	height: 100%;
+}
+img {
+	display: block;
+	padding: 20px;
+	padding-top: 40px;
+	margin-left: auto;
+	margin-right: auto;
+}
+
+h1 {
+	margin:0px;
+	padding: 30px;
+	/*font-size: 80px;*/
+	text-align: center;
+	font: 80px  "Lucida Grande", Arial, Verdana, sans-serif;
+	color: #333;
+	background: #eee;
+}
+
+p {
+	padding: 15px;
+	text-align: center;
+	font: 20px "Lucida Grande", Arial, Verdana, sans-serif;
+	color: #222;
+}
+
+footer {
+	position: absolute;
+	width: 100%;
+	text-align: center;
+	font: 12px "Lucida Grande", Arial, Verdana, sans-serif;
+	padding-bottom: 40px;
+	padding-top: 40px;
+	bottom: 0px;
+	color: #fefefe;
+	background: #cfcfcf;
+}
