@@ -1,5 +1,5 @@
 from flask import Flask, render_template
-execfile("beer.py")
+execfile("/home/pi/functional-alcoholic/beer.py")
 
 app = Flask(__name__)
 
