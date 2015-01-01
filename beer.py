@@ -68,20 +68,26 @@ def getKegState(type):
 	
 	# assign wight of keg
 	if (type == "mini" or type == "Mini"):
+		min_weight = 0
 		max_weight = 13
 	elif (type == "cornelius" or type == "Cornelius"):
+		min_weight = 0
 		max_weight = 49
 	elif (type == "sixth" or type == "Sixth"):
+		min_weight = 0
 		max_weight = 58
 	elif (type == "quarter" or type == "Quarter"):
+		min_weight = 20
 		max_weight = 87
 	elif (type == "slim" or type == "Slim"):
+		min_weight = 20	# need to confirm this number
 		max_weight = 87
 	else: #(type == "half" or type == "Half"):
+		min_weight = 0
 		max_weight = 161
 
 	# determine the percentage of beer remaining
-	percent = weight/max_weight
+	percent = (weight-min_weight)/(max_weight-min_weight)
 	# convert that percentage to a state integer ranging from 0 to 5
 	state = int(5 * percent)
 	# return the keg state
@@ -92,7 +98,7 @@ def getKegState(type):
 while (False):
 	volts = getVoltage(15)
 	pounds = toWeight(volts,v_offset, conv_fact) 
-	status = getKegState("mini")
+	status = getKegState("quarter")
 	# print the measured voltage
 	print "%f      %f      %d " % (volts,pounds,status)
 	# delay for a few seconds before going into loop again
