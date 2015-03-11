@@ -36,6 +36,9 @@ known_weight = 196
 known_volt = 3.11
 conv_fact = known_weight/known_volt
 
+min_weight = 0
+max_weight = 1
+
 def getVoltage(samples):
 	v_bridge_avg = 0
 	for  i in range(0,samples):
@@ -61,6 +64,8 @@ def getKegState(type):
 	global v_offset
 	global conv_fact
 	global samples	
+	global min_weight
+	global max_weight
 
 	# get data
 	voltage = getVoltage(samples)
@@ -74,8 +79,8 @@ def getKegState(type):
 		min_weight = 0
 		max_weight = 49
 	elif (type == "sixth" or type == "Sixth"):
-		min_weight = 0
-		max_weight = 58
+		min_weight = 10
+		max_weight = 45 #58
 	elif (type == "quarter" or type == "Quarter"):
 		min_weight = 20
 		max_weight = 87
