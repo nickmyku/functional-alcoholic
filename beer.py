@@ -257,9 +257,9 @@ while (True):
 		if(status < 1):
 			if((curr_time - last_alert_time) > alert_time):
 				# hide keg indicator
-
+				print "stuff"
 				# show keg indicator
-
+				print "things"
 		# delay for 50 milliseconds before going into loop again
 		sleep(.05)
 	except KeyboardInterrupt:
