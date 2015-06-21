@@ -160,16 +160,16 @@ def setScreenIndicator(level):
 	if(level >= 5):
 		segment_fill[4] = FILLED_SHADE
 	# 80% of keg indicator
-	elif(level >= 4):
+	if(level >= 4):
 		segment_fill[3] = FILLED_SHADE
 	# 60% of keg indicator
-	elif(level >= 3):
+	if(level >= 3):
 		segment_fill[2] = FILLED_SHADE
 	# 40% of keg indicator
-	elif(level >= 2):
+	if(level >= 2):
 		segment_fill[1] = FILLED_SHADE
 	# 20% keg indicator 
-	elif(level >= 1);
+	if(level >= 1):
 		segment_fill[0] = FILLED_SHADE
 	# empty keg indicator
 	#elif(level = 0):
