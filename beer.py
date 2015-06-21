@@ -4,6 +4,7 @@
 # created on Dec 23, 2014
 # script for reading straing gauges to monitor the weight of a keg
 
+import time
 from time import sleep
 from time import time
 import RPi.GPIO as GPIO
