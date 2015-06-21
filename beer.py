@@ -122,7 +122,8 @@ def getKegState(type):
 	# return the keg state
 	return state
 
-def setScreenMsg(str(txt)):
+def setScreenMsg(txt):
+	txt = str(txt)
 	MSG_XPOS = 10
 	MSG_YPOS = 10
 	# write the messgae to the screen buffer
