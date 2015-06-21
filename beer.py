@@ -5,9 +5,19 @@
 # script for reading straing gauges to monitor the weight of a keg
 
 from time import sleep
+from time import time
 import RPi.GPIO as GPIO
 import pickle
-from Adafruit_ADS1x15 import ADS1x15
+from Adafruit_ADS1x15 import ADS1x15 			# ADC package
+from Adafruit_SSD1306 import SSD1306_128_64		# OLED display package
+
+# supporting packages for OLED
+import Image
+import ImageDraw
+import ImageFont
+
+# reset pin for OLED display
+RST = 24
 
 # configure gpio pins
 GPIO.setwarnings(False)
@@ -24,6 +34,13 @@ sps = 250
 
 # create an adc object
 adc = ADS1x15(ic=ADS1115)
+# create OLED object
+disp = SSD1306_128_64(rst=RST)
+
+# initilaize display
+disp.clear()
+diso.display()
+FONT = ImageFont.load_default()
 
 # number of samples to take average of
 samples = 15
@@ -38,6 +55,13 @@ conv_fact = known_weight/known_volt
 
 min_weight = 0
 max_weight = 1
+
+msg_array = [	"We regret to inform you that your life is over as you know it... your keg is now empty",
+			"It would appear that your keg was mortally wounded and has lost a lot of fluid, we advice you get your keg to a medical professional at your earliest convenience",
+			"Looks like your keg isn't in the best shape... you should take care of that",
+			"So you still have a lot of beer left, but honestly is \"a lot\" really good enough for you?",
+			"Your keg is in good shape... for now... we'll be watching you.",
+			"Congradulations! its a keg!" ]
 
 def getVoltage(samples):
 	v_bridge_avg = 0
@@ -98,13 +122,146 @@ def getKegState(type):
 	# return the keg state
 	return state
 
+def setScreenMsg(str(txt)):
+	MSG_XPOS = 10
+	MSG_YPOS = 10
+	# write the messgae to the screen buffer
+	disp.text((MSG_XPOS,MSG_YPOS), txt, font=FONT, fill=255)
+	# refresh the display
+	disp.display()
+	return 0
+
+def setScreenValue(float(val)):
+	VAL_XPOS = 10
+	VAL_YPOS = 50
+	# create value string
+	val_str = "%.3f lbs of beer remaining" % val
+	# Write the value string to the screen buffer
+	disp.text((VAL_XPOS,VAL_YPOS), val_str, font=FONT, fill=255)
+	# refresh the display
+	disp.display()
+	return 0
+
+def setScreenIndicator(int(level)):
+
+	x_offset = 70
+	y_offset = 5
+
+	segment_fill = [0, 0, 0, 0, 0]
+	FILLED_SHADE = 128
+
+	# full keg indicator
+	if(level >= 5):
+		segment_fill[4] = FILLED_SHADE
+	# 80% of keg indicator
+	elif(level >= 4):
+		segment_fill[3] = FILLED_SHADE
+	# 60% of keg indicator
+	elif(level >= 3):
+		segment_fill[2] = FILLED_SHADE
+	# 40% of keg indicator
+	elif(level >= 2):
+		segment_fill[1] = FILLED_SHADE
+	# 20% keg indicator 
+	elif(level >= 1);
+		segment_fill[0] = FILLED_SHADE
+	# empty keg indicator
+	#elif(level = 0):
+		#return 0
+	# hide keg indicator
+	#else:
+		#return -1
+
+	# set dimensions of top trapazoidal section
+	height_element = 7
+	width_element = 28
+	x_element = x_offset + width_element + 1
+	y_element = y_offset + height_element
+	# draw top trapazoidal section
+	#draw.polygon([], outline=255, fill=segment_fill[4])
+
+	y_offset += height_element
+	# set dimenstions of top rectangular section
+	height_element = 7
+	width_element = 30
+	x_element = x_offset + width_element
+	y_element += height_element
+	# draw the top rectangular section
+	draw.rectangle((x_offset, y_offset, x_element, y_element), outline=255, fill=segment_fill[3])
+
+	y_offset += height_element
+	# set dimentions of middle rectangular section
+	height_element = 27 
+	width_element = 28
+	x_element = x_offset + width_element + 1
+	y_element += height_element
+	# draw the middle rectangular section
+	draw.rectangle((x_offset+1, y_offset, x_element, y_element), outline=255, fill=segment_fill[2]) 
+
+	y_offset += height_element
+	# set dimensions for botton rectangular section
+	height_element = 7
+	width_element = 30
+	x_element = x_offset + width_element
+	y_element += height_element
+	# draw the bottom rectangular section
+	draw.rectangle((x_offset, y_offset, x_element, y_element), outline=255, fill=segment_fill[1])
+
+	y_offset += height_element
+	# set dimentiosn for bottom trapazoidal section
+	height_element = 7
+	width_element = 30
+	x_element = x_offset + width_element + 1
+	y_element += height_element
+	# draw bottom trapazoidal section
+	#draw.polygon([], outline=255, fill=segment_fill[0])
 
 
-while (False):
-	volts = getVoltage(15)
-	pounds = toWeight(volts,v_offset, conv_fact) 
-	status = getKegState("quarter")
-	# print the measured voltage
-	print "%f      %f      %d " % (volts,pounds,status)
-	# delay for a few seconds before going into loop again
-	sleep(1)
+	
+
+last_update_time = time()
+
+while (True):
+	global last_update_time
+	global last_alert_time
+	global msg_array
+	try:
+		curr_time = time()
+		if((curr_time - last_update_time) > refresh_time):
+			# get values from ADC and format them into something useful
+			volts = getVoltage(15)
+			pounds = toWeight(volts,v_offset, conv_fact) 
+			status = getKegState("quarter")
+			
+			# update vales on OLED
+			setScreenValue(pounds)
+			# make sure status is within array bounds before trying to index array element
+			if((status>=0) and (status<=len(msg_array))):
+				setScreenMsg(msg_array[status])
+			# make sure the keg isnt in empty alarm state before showing indicator
+			if(status != 0):
+				setScreenIndicator(status)
+
+			# print the measured voltage to terminal
+			print "%f-V      %f-lbs      %d " % (volts,pounds,status)
+
+			# update the last update time
+			last_update_time = time()
+		# alert flash for low keg
+		if(status < 1):
+			if((curr_time - last_alert_time) > alert_time):
+				# hide keg indicator
+
+				# show keg indicator
+
+		# delay for 50 milliseconds before going into loop again
+		sleep(.05)
+	except KeyboardInterrupt:
+		break
+
+
+
+
+
+
+
