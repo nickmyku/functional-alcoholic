@@ -17,7 +17,7 @@ import ImageDraw
 import ImageFont
 
 # reset pin for OLED display
-RST = 24
+RST = 8
 
 # configure gpio pins
 GPIO.setwarnings(False)
