@@ -11,10 +11,10 @@ import RPi.GPIO as GPIO
 import pickle
 #import Adafruit_GPIO.I2C as I2C
 from Adafruit_ADS1x15 import ADS1x15 			# ADC package
-from Adafruit_SSD1306 import SSD1306_128_64		# OLED display package
+#from Adafruit_SSD1306 import SSD1306_128_64		# OLED display package
 #import Adafruit_SSD1306
 import smbus
-import SSD1306
+from SSD1306 import SSD1306_128_64
 
 # supporting packages for OLED
 import Image
