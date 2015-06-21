@@ -38,7 +38,7 @@ sps = 250
 # create an adc object
 adc = ADS1x15(ic=ADS1115)
 # create OLED object
-disp = Adafruit_SSD1306.SSD1306_128_64(rst=RST, i2c=1)
+disp = Adafruit_SSD1306.SSD1306_128_64(rst=RST, i2c_bus=1)
 
 # initilaize display
 disp.begin()
