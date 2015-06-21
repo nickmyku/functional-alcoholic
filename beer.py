@@ -123,6 +123,7 @@ def getKegState(type):
 	return state
 
 def setScreenMsg(txt):
+	# typecast as a string
 	txt = str(txt)
 	MSG_XPOS = 10
 	MSG_YPOS = 10
@@ -132,7 +133,9 @@ def setScreenMsg(txt):
 	disp.display()
 	return 0
 
-def setScreenValue(float(val)):
+def setScreenValue(val):
+	# typecast as a float
+	val = float(val)
 	VAL_XPOS = 10
 	VAL_YPOS = 50
 	# create value string
@@ -143,7 +146,9 @@ def setScreenValue(float(val)):
 	disp.display()
 	return 0
 
-def setScreenIndicator(int(level)):
+def setScreenIndicator(level):
+	# typecast as an integer
+	level = int(level)
 
 	x_offset = 70
 	y_offset = 5
