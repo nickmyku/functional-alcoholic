@@ -62,6 +62,9 @@ msg_array = [	"We regret to inform you that your life is over as you know it... 
 			"So you still have a lot of beer left, but honestly is \"a lot\" really good enough for you?",
 			"Your keg is in good shape... for now... we'll be watching you.",
 			"Congradulations! its a keg!" ]
+		
+# define globals	
+global last_update_time
 
 def getVoltage(samples):
 	v_bridge_avg = 0
