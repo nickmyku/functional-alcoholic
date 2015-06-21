@@ -40,6 +40,7 @@ adc = ADS1x15(ic=ADS1115)
 disp = SSD1306_128_64(rst=RST)
 
 # initilaize display
+disp.begin()
 disp.clear()
 disp.display()
 FONT = ImageFont.load_default()
