@@ -56,7 +56,9 @@ conv_fact = known_weight/known_volt
 min_weight = 0
 max_weight = 1
 
-global msg_array = [	"We regret to inform you that your life is over as you know it... your keg is now empty",
+global msg_array
+
+msg_array = [	"We regret to inform you that your life is over as you know it... your keg is now empty",
 			"It would appear that your keg was mortally wounded and has lost a lot of fluid, we advice you get your keg to a medical professional at your earliest convenience",
 			"Looks like your keg isn't in the best shape... you should take care of that",
 			"So you still have a lot of beer left, but honestly is \"a lot\" really good enough for you?",
