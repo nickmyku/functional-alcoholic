@@ -11,8 +11,8 @@ import RPi.GPIO as GPIO
 import pickle
 import Adafruit_GPIO.I2C as I2C
 from Adafruit_ADS1x15 import ADS1x15 			# ADC package
-#from Adafruit_SSD1306 import SSD1306_128_64		# OLED display package
-import Adafruit_SSD1306
+from Adafruit_SSD1306 import SSD1306_128_64		# OLED display package
+#import Adafruit_SSD1306
 
 # supporting packages for OLED
 import Image
@@ -36,9 +36,9 @@ gain = 256
 sps = 250
 
 # create an adc object
-adc = ADS1x15(ic=ADS1115)
+#adc = ADS1x15(ic=ADS1115)
 # create OLED object
-disp = Adafruit_SSD1306.SSD1306_128_64(rst=RST, i2c_bus=1)
+disp = SSD1306_128_64(rst=RST, i2c_bus=1)
 
 # initilaize display
 disp.begin()
