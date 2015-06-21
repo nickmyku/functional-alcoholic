@@ -36,7 +36,7 @@ gain = 256
 sps = 250
 
 # create an adc object
-#adc = ADS1x15(ic=ADS1115)
+adc = ADS1x15(ic=ADS1115)
 # create OLED object
 disp = SSD1306_128_64(rst=RST, i2c_bus=1)
 
