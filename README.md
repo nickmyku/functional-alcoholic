@@ -28,6 +28,14 @@ cd Adafruit_Python_SSD1306
 sudo python setup.py install
 ```
 
+install Adafruit GPIO library
+```
+sudo apt-get install git
+git clone https://github.com/adafruit/Adafruit_Python_GPIO.git
+cd Adafruit_Python_GPIO
+sudo python setup.py install
+```
+
 For debugging using GPIO commands
 ```
 git clone git://git.drogon.net/wiringPi
